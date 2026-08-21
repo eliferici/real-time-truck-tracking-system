@@ -37,7 +37,7 @@ License Plate Recognition
 FastAPI Backend
     ↓
 Web Interface
-
+```
 
 ## Screenshots
 
