@@ -25,7 +25,7 @@ The system also includes user registration and login, database management, camer
 - Real-time communication between the image processing system and the web application
 
 ## System Flow
-
+```text
 IP Camera
     ↓
 Image Processing
