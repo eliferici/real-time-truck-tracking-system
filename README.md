@@ -45,7 +45,7 @@ Web Interface
 <p align="center">
   <img width="1156" height="651" alt="truck_frame_1" src="https://github.com/user-attachments/assets/138aa79e-5357-4d28-91fc-b0ac5b9d1993" />
 </p>
-<p
+<p align="center">
 <img width="989" height="647" alt="truck_frame_2" src="https://github.com/user-attachments/assets/bf60e499-b306-498d-8704-ecdfdc97b1b7" />
 </p>
 
