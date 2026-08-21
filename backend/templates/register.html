@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>ÇimKo - Tır Takip Sistemi</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-family: Arial, sans-serif;
+
+            background-color: #f4f6f8;
+            color: #1f2937;
+        }
+
+        .register-container {
+            width: 430px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .register-card {
+            background-color: white;
+
+            padding: 35px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.10);
+        }
+
+        .register-card h2 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #0e3398;
+        }
+
+        button {
+            width: 100%;
+
+            padding: 12px;
+
+            margin-top: 10px;
+
+            border: none;
+            border-radius: 8px;
+
+            background-color: #0e3398;
+            color: white;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #09256f;
+        }
+
+        .login-text {
+            text-align: center;
+
+            margin-top: 22px;
+
+            font-size: 14px;
+        }
+
+        a {
+            color: #0e3398;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="register-container">
+
+
+    <div class="logo">
+
+        <h1>
+            <span style="color: red;">Çim</span><span style="color: rgb(14, 51, 152);">Ko</span>
+            - Tır Takip Sistemi
+        </h1>
+
+    </div>
+
+
+    <div class="register-card">
+
+        <h2>Kayıt Ol</h2>
+
+
+        <form action="/register" method="post">
+
+
+            <div class="form-group">
+
+                <label for="name">
+                    Ad Soyad
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="username">
+                    Kullanıcı Adı
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Telefon Numarası
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="05XXXXXXXXX"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    E-posta
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="xxxxxxxx@gmail.com"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Şifre
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                >
+
+            </div>
+
+
+            <button type="submit">
+                Kayıt Ol
+            </button>
+
+
+        </form>
+
+
+        <div class="login-text">
+
+            Zaten hesabınız var mı?
+
+            <a href="/login">
+                Giriş Yap
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

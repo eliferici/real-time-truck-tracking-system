@@ -1,0 +1,584 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>ÇimKo - Tır Takip Sistemi</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px;
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header {
+            background-color: white;
+            padding: 25px 30px;
+            border-radius: 14px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 25px 30px;
+            border-radius: 14px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .status-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .status-box {
+            flex: 1;
+            min-width: 220px;
+            padding: 20px;
+            background-color: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .status-title {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .status-value {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background-color: #0e3398;
+            color: white;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .button-area {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #0e3398;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #09256f;
+        }
+
+        .logout {
+            display: inline-block;
+            margin-top: 15px;
+            color: #dc2626;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .logout:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- BAŞLIK -->
+
+    <div class="header">
+
+        <h1>
+            <span style="color: red;">Çim</span><span style="color: rgb(14, 51, 152);">Ko</span>
+            - Tır Takip Sistemi
+        </h1>
+
+    </div>
+
+
+    <!-- SİSTEM DURUMU -->
+
+    <div class="card">
+
+        <h2>Sistem Durumu</h2>
+
+        <div class="status-container">
+
+
+            <div class="status-box">
+
+                <div class="status-title">
+                    Kamera Durumu
+                </div>
+
+                <div
+                    id="cameraStatus"
+                    class="status-value">
+                    Kontrol ediliyor...
+                </div>
+
+            </div>
+
+
+            <div class="status-box">
+
+                <div class="status-title">
+                    Toplam Tır
+                </div>
+
+                <div
+                    id="truckCount"
+                    class="status-value">
+                    0
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ARAÇLAR -->
+
+    <div class="card">
+
+        <h2>Araçlar</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Plaka</th>
+                    <th>Saat</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody id="truckList">
+
+                <!-- Gerçek tır bilgileri JavaScript tarafından eklenecek. -->
+
+            </tbody>
+
+        </table>
+
+
+        <div class="button-area">
+
+            <button onclick="resetSystem()">
+                Temizle
+            </button>
+
+        </div>
+
+
+        <a
+            href="/logout"
+            class="logout">
+            Çıkış Yap
+        </a>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+    async function resetSystem() {
+
+        try {
+
+            const response = await fetch(
+                "/reset",
+                {
+                    method: "POST"
+                }
+            );
+
+            const data = await response.json();
+
+            if (data.status === "ok") {
+
+                updatePanel();
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.log(
+                "Sistem sıfırlanamadı:",
+                error
+            );
+
+        }
+
+    }
+
+
+    async function updatePanel() {
+
+        try {
+
+            const response =
+                await fetch("/api/status");
+
+            const data =
+                await response.json();
+
+
+            const cameraStatus =
+                document.getElementById(
+                    "cameraStatus"
+                );
+
+
+            if (data.camera_connected) {
+
+                cameraStatus.textContent =
+                    "Bağlı";
+
+                cameraStatus.style.color =
+                    "green";
+
+            }
+
+            else {
+
+                cameraStatus.textContent =
+                    "Bağlantı Yok";
+
+                cameraStatus.style.color =
+                    "red";
+
+            }
+
+
+            document.getElementById(
+                "truckCount"
+            ).textContent =
+                data.truck_count;
+
+
+            const truckList =
+                document.getElementById(
+                    "truckList"
+                );
+
+
+            truckList.innerHTML = "";
+
+
+            if (
+                !data.trucks ||
+                data.trucks.length === 0
+            ) {
+
+                truckList.innerHTML = `
+                    <tr>
+                        <td colspan="2"
+                            class="empty-row">
+                            Henüz tır bilgisi yok.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+
+            data.trucks.forEach(
+                function(truck) {
+
+
+                    const row =
+                        document.createElement(
+                            "tr"
+                        );
+
+
+                    const plateCell =
+                        document.createElement(
+                            "td"
+                        );
+
+                    plateCell.textContent =
+                        truck.plate;
+
+
+                    const timeCell =
+                        document.createElement(
+                            "td"
+                        );
+
+                    timeCell.textContent =
+                        truck.time;
+
+
+                    row.appendChild(
+                        plateCell
+                    );
+
+                    row.appendChild(
+                        timeCell
+                    );
+
+
+                    truckList.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+        }
+
+        catch (error) {
+
+            console.log(
+                "Veri alınamadı:",
+                error
+            );
+
+        }
+
+    }
+
+
+    updatePanel();
+
+
+    setInterval(
+        updatePanel,
+        1000
+    );
+
+
+</script>
+
+</body>
+
+</html>
+    <script>
+         
+       async function resetSystem() {
+
+    try {
+
+        const response = await fetch(
+            "/reset",
+            {
+                method: "POST"
+            }
+        );
+
+        const data = await response.json();
+
+        if (data.status === "ok") {
+            updatePanel();
+        }
+
+    } catch (error) {
+
+        console.log(
+            "Sistem sıfırlanamadı:",
+            error
+        );
+
+    }
+}
+        
+        async function updatePanel() { /*Buradaki async, fonksiyonun asenkron işlemler yapabileceğini belirtir.*/
+
+            try {
+
+                const response = await fetch("/api/status"); /*ile sunucuya istek gönderiyoruz.*/
+
+                const data = await response.json();
+
+
+
+                const cameraStatus =
+                    document.getElementById("cameraStatus");
+
+
+                if (data.camera_connected) {
+
+                    cameraStatus.textContent = "Bağlı";
+
+                    cameraStatus.style.color = "green";
+
+                } else {
+
+                    cameraStatus.textContent = "Bağlantı Yok";
+
+                    cameraStatus.style.color = "red";
+
+                }
+
+
+
+                document.getElementById(
+                    "truckCount"
+                ).textContent = data.truck_count;
+
+
+
+                const truckList =
+                    document.getElementById("truckList");
+
+
+                truckList.innerHTML = "";
+                
+
+                // Eğer hiç tır yoksa
+
+                if (
+                !data.trucks ||
+                 data.trucks.length === 0
+) {
+
+                 truckList.innerHTML = `
+        <tr>
+            <td colspan="3">
+                Henüz tır bilgisi yok.
+            </td>
+        </tr>
+    `;
+
+    return;
+}
+
+
+                // Her tırı listele
+
+                data.trucks.forEach(function(truck) {
+
+    // Yeni bir tablo satırı oluşturuyoruz.
+                const row =
+                document.createElement("tr");
+
+
+    // Plaka hücresi
+                 const plateCell =
+                 document.createElement("td");
+
+                  plateCell.textContent =
+                 truck.plate;
+
+                 const timeCell =
+                 document.createElement("td");
+
+                 timeCell.textContent = truck.time ;
+
+
+    // Hücreleri satıra ekliyoruz
+                
+
+                 row.appendChild(plateCell);
+
+                 row.appendChild(timeCell) ;
+    // Satırı tabloya ekliyoruz
+                 truckList.appendChild(row);
+
+});
+
+            }
+
+            catch (error) {
+
+                console.log(
+                    "Veri alınamadı:",
+                    error
+                );
+
+            }
+
+        }
+
+
+
+        updatePanel();
+
+        setInterval(
+            updatePanel,
+            1000
+        );
+
+    </script>
+
+</body>
+
+</html>
+
